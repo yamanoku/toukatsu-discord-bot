@@ -92,11 +92,11 @@ async function notifyActiveForumPosts() {
 
 
 /**
- * 4. Deno Cronの設定 (毎朝9時00分 JST)
+ * 4. Deno Cronの設定 (毎朝9時00分 JST, 月・木曜日)
  */
 Deno.cron(
     "Active Forum Posts Daily Notification",
-    "0 0 * * *",
+    "0 0 * * 1,4",
     async () => {
         console.log("--- Deno Cron 実行開始 (JST 9:00) ---");
         await notifyActiveForumPosts();
