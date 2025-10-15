@@ -202,7 +202,7 @@ export async function notifyNewMusics() {
 
             const notificationEmbed: APIEmbed = {
                 title: `📢 「東葛.devのお気に入り」新曲追加通知`,
-                description: `新曲が${fields.length}曲追加されました！ぜひ聞いてみてください。`,
+                description: `新曲が${addedTrackIds.length}曲追加されました！ぜひ聞いてみてください。`,
                 color: 0x5865F2, // Discordカラー (Blurple)
                 fields: fields,
                 timestamp: new Date().toISOString(),
