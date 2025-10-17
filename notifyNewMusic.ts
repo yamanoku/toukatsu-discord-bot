@@ -29,9 +29,7 @@ interface SpotifyTrack {
 // 認証処理: Client Credentials Flow (公開プレイリストなので利用可)
 // ----------------------------------------------------
 async function getAccessToken(): Promise<string> {
-    console.log(`${CLIENT_ID}:${CLIENT_SECRET}`);
     const authHeader = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
-    console.log(authHeader);
 
     const response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
@@ -207,7 +205,7 @@ export async function notifyNewMusics() {
                 fields: fields,
                 timestamp: new Date().toISOString(),
                 footer: {
-                    text: `[プレイリスト詳細](${DETAIL_LINK})`,
+                    text: DETAIL_LINK,
                 }
             };
             await sendDiscordNotification(
@@ -238,8 +236,6 @@ export async function notifyNewMusics() {
     kv.close();
     console.log("--- 処理を終了 ---");
 }
-
-notifyNewMusics();
 
 // Denoの実行コマンドの例:
 // deno run --allow-net --allow-env --allow-sys notifyNewMusic.ts
