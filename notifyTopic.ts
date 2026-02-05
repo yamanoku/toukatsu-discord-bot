@@ -54,5 +54,3 @@ export async function notifyTopic() {
         console.error("❌ 話題の投稿中にエラーが発生しました:", error);
     }
 }
-
-notifyTopic();
