@@ -3,7 +3,6 @@ import { initRestClient, sendDiscordNotification } from "./notifyDiscord.ts";
 
 // --- 設定値 ---
 const TOPIC_CHANNEL_ID = Deno.env.get("TOPIC_CHANNEL_ID") || "YOUR_TOPIC_CHANNEL_ID";
-const BOT_CLIENT_ID = Deno.env.get("TOUKATSU_DEV_DISCORD_BOT_CLIENT_ID") || "YOUR_BOT_CLIENT_ID";
 
 // 話題のパターン（ここに話題を追加してください）
 const TOPICS: string[] = [
@@ -34,7 +33,7 @@ export async function notifyTopic() {
             { query: new URLSearchParams({ limit: "1" }) }
         ) as any[];
 
-        if (messages.length > 0 && messages[0].author.id === BOT_CLIENT_ID) {
+        if (messages.length > 0 && messages[0].author.bot) {
             console.log("直前の投稿がbotのため、話題の提供をスキップします。");
             return;
         }
@@ -55,3 +54,5 @@ export async function notifyTopic() {
         console.error("❌ 話題の投稿中にエラーが発生しました:", error);
     }
 }
+
+notifyTopic();
