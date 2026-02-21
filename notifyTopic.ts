@@ -1,4 +1,4 @@
-import { APIEmbed, Routes } from "npm:discord.js";
+import { APIEmbed, type APIMessage, Routes } from "npm:discord.js";
 import { initRestClient, sendDiscordNotification } from "./notifyDiscord.ts";
 
 // --- 設定値 ---
@@ -31,7 +31,7 @@ export async function notifyTopic() {
         const messages = await rest.get(
             Routes.channelMessages(TOPIC_CHANNEL_ID),
             { query: new URLSearchParams({ limit: "1" }) }
-        ) as any[];
+        ) as APIMessage[];
 
         if (messages.length > 0 && messages[0].author.bot) {
             console.log("直前の投稿がbotのため、話題の提供をスキップします。");

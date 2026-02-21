@@ -18,11 +18,30 @@ const PLAYLIST_ID = "78PN9O8cF563eazR5lT4tu"; // 例: Spotifyの公開プレイ�
 const KV_KEY_SNAPSHOT = ["spotify", PLAYLIST_ID, "snapshot_id"];
 const KV_KEY_TRACKS = ["spotify", PLAYLIST_ID, "track_ids"];
 
+interface SpotifyTokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+}
+
 interface SpotifyTrack {
     id: string;
     name: string;
     artists: { name: string }[];
     album: { name: string; };
+}
+
+interface SpotifyPlaylistItem {
+    track: { id: string } | null;
+}
+
+interface SpotifyPlaylistMetaData { 
+    snapshot_id: string;
+    tracks: { total: number };
+}
+
+interface SpotifyPlaylistTracksData {
+    items: SpotifyPlaylistItem[];
 }
 
 // ----------------------------------------------------
@@ -57,7 +76,7 @@ async function getAccessToken(): Promise<string> {
         throw new Error(`Failed to get access token: ${errorMessage}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as SpotifyTokenResponse;
     return data.access_token;
 }
 
@@ -71,7 +90,7 @@ async function fetchPlaylistData(accessToken: string, playlistId: string): Promi
         headers: { "Authorization": `Bearer ${accessToken}` }
     });
     if (!metaRes.ok) throw new Error(`Failed to fetch playlist meta: ${metaRes.statusText}`);
-    const metaData = await metaRes.json();
+    const metaData = await metaRes.json() as SpotifyPlaylistMetaData;
     const snapshotId = metaData.snapshot_id;
 
     // 2. トラックリストの取得 (ページネーションは省略)
@@ -79,12 +98,12 @@ async function fetchPlaylistData(accessToken: string, playlistId: string): Promi
         headers: { "Authorization": `Bearer ${accessToken}` }
     });
     if (!tracksRes.ok) throw new Error(`Failed to fetch playlist tracks: ${tracksRes.statusText}`);
-    const tracksData = await tracksRes.json();
-    
+    const tracksData = await tracksRes.json() as SpotifyPlaylistTracksData;
+
     // トラックIDの配列を抽出
     const trackIds = tracksData.items
-        .map((item: any) => item.track?.id)
-        .filter((id: string) => id); // IDがないもの（エピソードなど）を除外
+        .map((item) => item.track?.id)
+        .filter((id): id is string => !!id); // IDがないもの（エピソードなど）を除外
 
     return { snapshotId, trackIds };
 }
@@ -175,7 +194,7 @@ export async function notifyNewMusics() {
             console.error("❌ トラック詳細情報の取得に失敗:", tracksDetailRes.statusText);
             // エラー時でもKVの更新は続行することが多いですが、ここでは一旦処理を中断
         } else {
-            const tracksDetailData = await tracksDetailRes.json();
+            const tracksDetailData = await tracksDetailRes.json() as { tracks: SpotifyTrack[] };
             
             console.log("--- 新しく追加された曲 ---");
             
