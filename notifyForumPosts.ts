@@ -5,7 +5,7 @@ import {
   ChannelType,
   type RESTGetAPIGuildThreadsResult,
   Routes,
-} from "npm:discord.js";
+} from "discord.js";
 import { initRestClient, sendDiscordNotification } from "./notifyDiscord.ts";
 
 // --- 設定値 (環境変数からの取得を推奨) ---

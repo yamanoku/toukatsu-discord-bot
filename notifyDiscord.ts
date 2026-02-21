@@ -1,4 +1,4 @@
-import { APIEmbed, REST, Routes } from "npm:discord.js";
+import { APIEmbed, REST, Routes } from "discord.js";
 
 // 🚨 トークンはBotの「パスワード」です。厳重に管理してください。
 const DISCORD_BOT_TOKEN = Deno.env.get("DISCORD_BOT_TOKEN") || "YOUR_BOT_TOKEN";

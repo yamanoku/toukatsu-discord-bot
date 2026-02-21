@@ -1,4 +1,4 @@
-import { APIEmbed, type APIMessage, Routes } from "npm:discord.js";
+import { APIEmbed, type APIMessage, Routes } from "discord.js";
 import { initRestClient, sendDiscordNotification } from "./notifyDiscord.ts";
 
 // --- 設定値 ---

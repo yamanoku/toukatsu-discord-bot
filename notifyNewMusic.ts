@@ -1,7 +1,7 @@
 // 必要な型やライブラリをインポート
 // Denoの組み込みfetch()を使用します
 
-import { APIEmbed } from "npm:discord.js";
+import { APIEmbed } from "discord.js";
 import { initRestClient, sendDiscordNotification } from "./notifyDiscord.ts";
 const MESSAGE_TARGET_CHANNEL_ID = Deno.env.get("MESSAGE_TARGET_CHANNEL_ID") ||
   "YOUR_TARGET_CHANNEL_ID"; // 通知先のチャンネルID
