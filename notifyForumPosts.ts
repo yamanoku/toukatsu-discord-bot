@@ -1,5 +1,5 @@
 // Denoのnpmパッケージ連携機能を使用
-import { Routes, ChannelType, APIEmbed } from "npm:discord.js";
+import { Routes, ChannelType, APIEmbed, type RESTGetAPIGuildThreadsResult, type APIChannel } from "npm:discord.js";
 import { initRestClient, sendDiscordNotification } from "./notifyDiscord.ts";
 
 // --- 設定値 (環境変数からの取得を推奨) ---
@@ -26,17 +26,17 @@ export async function notifyActiveForumPosts() {
     try {
         // 1. 特定フォーラムのオープンな投稿の一覧を取得する
         // REST APIエンドポイント: GET /guilds/{guild_id}/threads/active
-        const activeThreadsResult: any = await rest.get(
+        const activeThreadsResult = await rest.get(
             Routes.guildActiveThreads(GUILD_ID)
-        );
-        
+        ) as RESTGetAPIGuildThreadsResult;
+
         // 結果からスレッドリストを取得
-        const allThreads: any[] = activeThreadsResult.threads || [];
+        const allThreads: APIChannel[] = activeThreadsResult.threads || [];
 
         // 特定のフォーラムチャンネルID（parent_id）と公開スレッド（type 11）でフィルタリング
         const activeForumPosts = allThreads.filter(
-            (thread: any) => 
-                thread.type === ChannelType.PublicThread && 
+            (thread) =>
+                thread.type === ChannelType.PublicThread &&
                 thread.parent_id === FORUM_CHANNEL_ID
         );
 
@@ -48,7 +48,7 @@ export async function notifyActiveForumPosts() {
         console.log(`アクティブな投稿数: ${activeForumPosts.length}件`);
 
         // 2. 整形する (Discord Embedを作成)
-        const fields = activeForumPosts.map((post: any) => {
+        const fields = activeForumPosts.map((post) => {
             // フォーラム投稿への直接リンクを生成
             const postLink = `${BASE_LINK}/${post.id}/${post.id}`;
 

@@ -25,6 +25,10 @@ interface SpotifyTrack {
     album: { name: string; };
 }
 
+interface SpotifyPlaylistItem {
+    track: { id: string } | null;
+}
+
 // ----------------------------------------------------
 // 認証処理: Client Credentials Flow (公開プレイリストなので利用可)
 // ----------------------------------------------------
@@ -57,7 +61,7 @@ async function getAccessToken(): Promise<string> {
         throw new Error(`Failed to get access token: ${errorMessage}`);
     }
 
-    const data = await response.json();
+    const data = await response.json() as { access_token: string };
     return data.access_token;
 }
 
@@ -71,7 +75,7 @@ async function fetchPlaylistData(accessToken: string, playlistId: string): Promi
         headers: { "Authorization": `Bearer ${accessToken}` }
     });
     if (!metaRes.ok) throw new Error(`Failed to fetch playlist meta: ${metaRes.statusText}`);
-    const metaData = await metaRes.json();
+    const metaData = await metaRes.json() as { snapshot_id: string; tracks: { total: number } };
     const snapshotId = metaData.snapshot_id;
 
     // 2. トラックリストの取得 (ページネーションは省略)
@@ -79,12 +83,12 @@ async function fetchPlaylistData(accessToken: string, playlistId: string): Promi
         headers: { "Authorization": `Bearer ${accessToken}` }
     });
     if (!tracksRes.ok) throw new Error(`Failed to fetch playlist tracks: ${tracksRes.statusText}`);
-    const tracksData = await tracksRes.json();
-    
+    const tracksData = await tracksRes.json() as { items: SpotifyPlaylistItem[] };
+
     // トラックIDの配列を抽出
     const trackIds = tracksData.items
-        .map((item: any) => item.track?.id)
-        .filter((id: string) => id); // IDがないもの（エピソードなど）を除外
+        .map((item) => item.track?.id)
+        .filter((id): id is string => !!id); // IDがないもの（エピソードなど）を除外
 
     return { snapshotId, trackIds };
 }
@@ -175,7 +179,7 @@ export async function notifyNewMusics() {
             console.error("❌ トラック詳細情報の取得に失敗:", tracksDetailRes.statusText);
             // エラー時でもKVの更新は続行することが多いですが、ここでは一旦処理を中断
         } else {
-            const tracksDetailData = await tracksDetailRes.json();
+            const tracksDetailData = await tracksDetailRes.json() as { tracks: SpotifyTrack[] };
             
             console.log("--- 新しく追加された曲 ---");
             
