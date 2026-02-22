@@ -1,0 +1,28 @@
+name: バグ報告
+description: 不具合や予期しない動作を報告する
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 関連する機能
+      options:
+        - general
+        - spotify
+        - forum_board
+        - thema_talk
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: バグの内容
+      description: 何が起きているか説明してください
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待する動作
+      description: 本来どう動くべきか説明してください
+    validations:
+      required: true
