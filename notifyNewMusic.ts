@@ -157,11 +157,11 @@ export async function notifyNewMusics() {
   }
 
   // 3. スナップショットIDを比較して変更をチェック
-  // if (latestData.snapshotId === lastSnapshotId) {
-  //     console.log("ℹ️ スナップショットIDが一致しました。プレイリストに変更はありません。");
-  //     kv.close();
-  //     return;
-  // }
+  if (latestData.snapshotId === lastSnapshotId) {
+    console.log("ℹ️ スナップショットIDが一致しました。プレイリストに変更はありません。");
+    kv.close();
+    return;
+  }
 
   console.log(
     `⚠️ プレイリストの変更を検出! (旧ID: ${
