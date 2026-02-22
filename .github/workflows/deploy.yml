@@ -17,4 +17,5 @@ jobs:
         with:
           project: "h-kono-it-toukatsu-di-39"
           entrypoint: "main.ts"
-          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
+        env:
+          DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
