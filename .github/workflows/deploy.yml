@@ -17,6 +17,6 @@ jobs:
           deno-version: v2.x
 
       - name: Deploy to Deno Deploy
-        run: deno run -Ar jsr:@deno/deployctl deploy --project=h-kono-it-toukatsu-di-39 main.ts
+        run: deno run -Ar jsr:@deno/deployctl deploy --project=h-kono-it-toukatsu-di-39 --prod main.ts
         env:
           DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
