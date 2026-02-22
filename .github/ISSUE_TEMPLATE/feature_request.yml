@@ -1,0 +1,21 @@
+name: 機能リクエスト
+description: 新機能や改善を提案する
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 関連する機能
+      options:
+        - general
+        - spotify
+        - forum_board
+        - thema_talk
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 提案内容
+      description: どんな機能や改善を希望するか説明してください
+    validations:
+      required: true
