@@ -3,7 +3,8 @@ import { notifyNewMusics } from "./notifyNewMusic.ts";
 import { notifyTopic } from "./notifyTopic.ts";
 
 /**
- * 4. Deno Cronの設定 (毎朝9時00分 JST, 月・木曜日)
+ * フォーラムのアクティブな投稿を特定チャンネルに通知する周期の定義
+ * 毎朝9時00分 JST, 月・木曜日
  */
 Deno.cron(
     "Active Forum Posts Daily Notification",
@@ -15,7 +16,10 @@ Deno.cron(
     }
 );
 
-
+/**
+ * Spotifyで追加された新しい音楽を特定チャンネルに通知する周期の定義
+ * 毎日10時00分 JST
+ */
 Deno.cron(
     "Spotify Add New Music Notification",
     "0 1 * * *",
@@ -26,9 +30,13 @@ Deno.cron(
     }
 );
 
+/**
+ * ランダムで話題を特定チャンネルに投稿する周期の定義
+ * 毎週火曜日の10時00分 JST
+ */
 Deno.cron(
     "Random Topic Notification",
-    "0 10 * * *",
+    "0 10 * * 2",
     async () => {
         console.log("--- Deno Cron 実行開始 (話題提供) ---");
         await notifyTopic();
