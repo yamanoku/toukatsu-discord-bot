@@ -8,9 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write # Deno Deployとの認証に必要
-      contents: read
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -20,3 +17,4 @@ jobs:
         with:
           project: "h-kono-it-toukatsu-di-39"
           entrypoint: "main.ts"
+          token: ${{ secrets.DENO_DEPLOY_TOKEN }}
